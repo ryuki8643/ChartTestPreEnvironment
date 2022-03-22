@@ -29,17 +29,22 @@
 
 
 }
+
 .AverageBox:hover{
     transform: scale(1.5);
     position:absolute;
     top:12%;
     left:4.5%;
 }
+.AverageBoxContent{
+    text-align: left;
+}
 
 
 
 .geoChart{
     position: relative;
+    font-size: 0;
 }
 .bigAndBoldClass {
     width: 100px;
@@ -156,17 +161,28 @@
     border-radius: 10px;
     width: 30%;
 }
-
+.columnHeadersMUI{
+    white-space: normal;
+    word-wrap: break-word;
+    color:black;
+}
 .bigAndBoldClass{
     padding: 8px 19px;
     margin: 2em 0;
-    color: #2c2c2f;
-    background: #cde4ff;
-    border-top: solid 5px #5989cf;
-    border-bottom: solid 5px #5989cf;
+    color: white;
+    word-break : break-all;
+    word-wrap: break-word;
+    table-layout: fixed;
+    width: 50px;
+
+
+    background: blue;
+    border-top: solid 5px blue;
+    border-bottom: solid 5px blue;
     z-index: 0;
 }
 .highlightClass{
+
     padding: 8px 19px;
     margin: 2em 0;
     color: #2c2c2f;
@@ -180,5 +196,10 @@
 .resetButton{
     font-size: 100%;
     max-height: 56px;
+}
+
+.modalAutoComplete{
+    display: flex;
+    margin-top: 1%;
 }
 

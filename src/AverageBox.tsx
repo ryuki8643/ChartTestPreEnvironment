@@ -19,7 +19,8 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
 type AverageBoxType={
-    textLine:string
+    averageData:string
+    UnitData:string
 }
 export  function AverageBox(props:AverageBoxType) {
     return (
@@ -38,7 +39,8 @@ export  function AverageBox(props:AverageBoxType) {
                         }}
                     >
                         <Item key={24} elevation={24}>
-                            Average {props.textLine}
+                            <div className='AverageBoxContent'>&nbsp;UNIT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;{props.UnitData}&nbsp;</div>
+                            <div className='AverageBoxContent'>&nbsp;AVERAGE&nbsp;:&nbsp;{props.averageData}&nbsp;</div>
                         </Item>
 
                     </Box>

@@ -18,8 +18,9 @@ const Item = styled(Paper)(({ theme }) => ({
     marginLeft:'30%',
 
     marginBottom:'-0.8%',
-    background:"green",
+    background:'green',
     display:"flex",
+
 
 
 

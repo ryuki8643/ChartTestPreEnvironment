@@ -54,6 +54,7 @@ function valueLabelFormat(value:number) {
 type timeBarProps={
     timeArray:number[]
     yearChange(value:number|number[]):void
+    currentYearData:number
 
 
 }
@@ -68,6 +69,7 @@ export  function YearSlider(props:timeBarProps) {
                 defaultValue={2027}
                 valueLabelFormat={valuetext}
                 getAriaValueText={valueLabelFormat}
+                value={props.currentYearData}
                 step={null}
                 valueLabelDisplay="auto"
                 marks={props.timeArray.map(function(value){return {'value':value}})}
