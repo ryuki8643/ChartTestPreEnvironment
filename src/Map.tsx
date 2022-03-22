@@ -5,7 +5,7 @@ import {collection,  getDocs, query,where,documentId} from "firebase/firestore";
 import {data1,  SDGStargetNames, data1_re} from "./dataExmples";
 import {db} from "./firebaseCongig";
 import {areaChartOptions, barChartOption, options, pieChartOption, tableOption} from "./chartOptions";
-
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 
 import { enableIndexedDbPersistence } from "firebase/firestore";
@@ -26,6 +26,8 @@ import {
 import SelectUnstyled from "@mui/base/SelectUnstyled";
 import {YearSlider} from "./TimeBar";
 import {RowAndColumnSpacing} from "./TimeBarLegend";
+import {SDGsTable} from "./SDGsTable";
+import {SDGsTargetObject} from "./SDGsTargetData";
 
 enableIndexedDbPersistence(db)
     .catch((err) => {
@@ -42,9 +44,9 @@ interface dragon{ [key:string]: {[key:number]:{'Data':{[key:string]:(string|numb
 
 export function Map(){
     useEffect(()=>{
-        let firstDataTitle="1.1.1_Proportion of population below international poverty line (%)"
+        let firstDataTitle="1.1.1 Proportion of population below international poverty line (%)"
         takeSnapshot(firstDataTitle.charAt(0),firstDataTitle)
-        setListBoxValue("1.1.1_Proportion of population below international poverty line (%)")
+        setListBoxValue("1.1.1 Proportion of population below international poverty line (%)")
     },[])
 
 
@@ -81,17 +83,18 @@ export function Map(){
         setTargetName(tableName)
         if(documentName !=docNowName) {
 
-            const snapshot = getDocs(query(collection(db, "read-test-sdgs"), where(documentId(), "==", documentName)))
+            const snapshot = getDocs(query(collection(db, "sdgs"), where(documentId(), "==", documentName)))
             snapshot.then((querySnapshot) => {
                 querySnapshot.docs
                     .forEach((doc) => {
 
                         if (doc.id == documentName) {
 
+
                             let yearsCacheData=Object.keys(doc.data()[tableName]).map(function(yearLog){ return Number(yearLog)})
                             yearsCacheData=yearsCacheData.filter(Boolean)
                             setDataYears(yearsCacheData)
-                            
+
                             let currentYearCache=yearsCacheData.reduce(function (a, b) {return Math.max(a, b);})
                             setCurrentYear(currentYearCache)
 
@@ -186,6 +189,8 @@ export function Map(){
                 setListBoxValue(changeData)
 
                 takeSnapshot(changeData.charAt(0),changeData)
+                console.log(SDGsTargetObject['1.2.1　Proportion of population living below the national poverty line (%)'],targetName)
+
 
         }
 
@@ -228,7 +233,7 @@ export function Map(){
             <div className="topTable">
                 <CustomSelect className="change_table"   value={listBoxValue}>
                     {SDGStargetNames.map((tableTitle)=>
-                        <StyledOption value={tableTitle} key={tableTitle}>{tableTitle}from firestore </StyledOption>
+                        <StyledOption value={tableTitle} key={tableTitle}>{tableTitle}</StyledOption>
                     )}
                 </CustomSelect>
                 <BasicModal
@@ -237,11 +242,15 @@ export function Map(){
                     dataSource={sourceOfData}
                     timeArray={dataYears}
                     yearChange={yearChangeProgress}
-                    currentStatus={"　"+currentYear+" "+targetName}
+                    currentStatus={currentYear+" "+targetName}
+                    targetName={targetName}
                     defaultYear={dataYears.reduce(function (a, b) {return Math.max(a, b);})}
+                    currentYearData={currentYear}
+                    unit={unit}
+
                 />
             </div>
-            <AverageBox  textLine={averageArray.toString()+' '+unit}/>
+            <AverageBox  averageData={averageArray.toString()} UnitData={unit}/>
 
 
 
@@ -260,12 +269,12 @@ export function Map(){
 
             </div>
             <RowAndColumnSpacing/>
-            <YearSlider timeArray={dataYears} yearChange={yearChangeProgress} />
-            <Chart chartType='AreaChart' data={yearByData} options={areaChartOptions(listBoxValue)}/>
+            <YearSlider timeArray={dataYears} yearChange={yearChangeProgress} currentYearData={currentYear}/>
+            <Chart chartType='AreaChart' data={yearByData.map(function(yearByData1){if(yearByData1[0]!='Country' ){return [Number(yearByData1[0]),yearByData1[1]]}else{return yearByData1}})} options={areaChartOptions(listBoxValue)}/>
+
             <div className="chartGrandParent">
                 <div className="chartParent">
-                    <Chart className="tableCLass" chartType="Table"  data={dataset} width="100%" height="290px" options={tableOption}/>
-
+                    <SDGsTable dataset={dataset}/>
                     <Chart className="pieChartClass" chartType="PieChart" data={dataset} width="100%" height="300px" options={pieChartOption}/>
                 </div>
                 <div className="chartParent2">

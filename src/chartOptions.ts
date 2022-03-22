@@ -1,9 +1,10 @@
 export const options = {
     region:"world",
-    sizeAxis: { minValue: 100, maxValue: 100 },
+    sizeAxis: { minSize: 100, maxSize: 100 },
+
 
     colorAxis: {colors: ["blue","green","yellow","red"]},
-    legend:{textStyle: {color: 'black', fontSize: 10}},
+    legend:{position:'bottom',textStyle: {color: 'black', fontSize: 0}},
     tooltip:{textStyle: {fontSize: 20,bold:true}, showColorCode: true,zIndex:30},
 
     backgroundColor: '#81d4fa',
@@ -54,12 +55,13 @@ export const areaChartOptions=(titleName:string)=>{
         pointShape: 'diamond',
         legend:{position:'bottom'},
         title:titleName,
+        hAxis:{gridlines:{minSpacing:50}},
         tooltip:{textStyle: {color: '#FF0000'}, showColorCode: true},
 
 }}
 export const tableOption={
     cssClassNames :{headerRow: 'bigAndBoldClass',
-        hoverTableRow: 'highlightClass'}
+        tableRow: 'highlightClass'}
 };
 export const pieChartOption={
     chartArea:{left:"0%",right:"0%",top:20,width:'60%',height:'80%'},
@@ -73,4 +75,5 @@ export const barChartOption={
     fontSize:9,
     chartArea: {width:'100%',left:'25%'},
     legend:{position: 'bottom'},
+    tooltip:{textStyle:{fontSize:15}, showColorCode: true}
 }

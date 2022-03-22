@@ -13,6 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {Autocomplete} from "@mui/material";
 import {TextField} from "@mui/material";
 import {YearSlider} from "./TimeBar";
+import {SDGsTargetObject} from "./SDGsTargetData";
 
 
 const ButtonStyle={
@@ -33,6 +34,10 @@ type ModalMake={
     yearChange(value:number|number[]):void
     currentStatus:string
     defaultYear:number
+    currentYearData:number
+    targetName:string
+    unit:string
+
 
 }
 
@@ -66,29 +71,57 @@ export function BasicModal(props:ModalMake) {
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
             >
-                <DialogTitle id="scroll-dialog-title">SDGs Map List</DialogTitle>
-                <Typography>　Current Data</Typography>
-                <Typography>{props.currentStatus}</Typography>
-                <YearSlider timeArray={props.timeArray} yearChange={props.yearChange} />
-                <div className='topTable'>
-                    <Autocomplete
+                <Typography variant='h4'>&nbsp;SDGs Map Options</Typography>
+                <Typography variant='h6' sx={{marginLeft:2.5}}>Current Data</Typography>
+                <Typography sx={{marginLeft:4}}>{props.currentStatus}</Typography>
 
-                        disablePortal
-                        id="combo-box-demo"
-                        options={Object.keys(allCountriesMetaData)}
-                        sx={{
-                            width: 300 ,
-                            marginLeft:'3%'
-                        }}
-                        renderInput={(params) => <TextField {...params} label="Country or Region" />}
-                        onInputChange={(event, value, reason)=>props.countryComponent(allCountriesMetaData[value])}
-                    />
-                    <Button variant='contained' className="resetButton" onClick={()=>props.countryComponent('world')}>Reset to World Map</Button>
-                </div>
+
 
                 <DialogContent dividers={scroll === 'paper'}>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Click SDGs target! Map Change
+                    <Typography variant='h6' sx={{marginLeft:2}}>Target</Typography>
+                    <Typography sx={{marginLeft:4}}>{SDGsTargetObject[props.targetName]}</Typography>
+                    <Typography variant='h6' sx={{marginLeft:2}}>Unit</Typography>
+                    <Typography sx={{marginLeft:4}}>{props.unit}</Typography>
+
+                    <YearSlider timeArray={props.timeArray} yearChange={props.yearChange} currentYearData={props.currentYearData}/>
+                    <Typography variant='h6' sx={{marginLeft:2}}>Select Years</Typography>
+                    <div className='modalAutoComplete'>
+                        <Autocomplete
+
+                            disablePortal
+                            id="combo-box-demo"
+                            options={props.timeArray.map(function(yearLog){ return yearLog.toString()})}
+                            sx={{
+                                width: "80%" ,
+                                marginLeft:'3%',
+
+                            }}
+                            renderInput={(params) => <TextField {...params} label="years" />}
+                            onInputChange={(event, value, reason)=>props.yearChange(Number(value))}
+                        />
+                        <Button sx={{width:'50%'}} variant='contained' className="resetButton" onClick={()=>props.yearChange(props.defaultYear)}>Reset to latest&nbsp;Year</Button>
+                    </div>
+                    <Typography variant='h6' sx={{marginLeft:2}}>Select Map Region</Typography>
+                    <div className='modalAutoComplete'>
+                        <Autocomplete
+
+                            disablePortal
+                            id="combo-box-demo"
+                            options={Object.keys(allCountriesMetaData)}
+                            sx={{
+                                width: "80%" ,
+                                marginLeft:'3%'
+                            }}
+                            renderInput={(params) => <TextField {...params} label="Country or Region" />}
+                            onInputChange={(event, value, reason)=>props.countryComponent(allCountriesMetaData[value])}
+                        />
+                        <Button sx={{width:'50%'}} variant='contained' className="resetButton" onClick={()=>props.countryComponent('world')}>Reset to World&nbsp;&nbsp;Map</Button>
+                    </div>
+                    <Typography id="modal-modal-description" sx={{ mt: 2,marginLeft:2 }} variant="h6">
+                        Click SDGs target!
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2,marginLeft:2 }} variant="h6">
+                        Map Change
                     </Typography>
                     {SDGStargetNames.map((tableTitle)=>
                         <Button sx={{
@@ -97,8 +130,14 @@ export function BasicModal(props:ModalMake) {
                             textAlign: 'left',
                         }} value={tableTitle} key={tableTitle} onClick={(event => props.clickComponent(event))}>{tableTitle}</Button>
                     )}
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        SDGs target data from © {props.dataSource}
+                    <Typography variant='h6' sx={{marginLeft:2}}>Source of data</Typography>
+                    <Typography id="modal-modal-description" sx={{
+                        mt: 2,
+                        width:'90%',
+                        overflowWrap: 'break-word',
+                        marginLeft:4
+                    }}>
+                        © {props.dataSource}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
